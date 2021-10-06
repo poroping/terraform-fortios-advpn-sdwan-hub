@@ -18,6 +18,10 @@ terraform {
       source  = "poroping/fortios"
       version = ">= 2.3.4"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.1.0"
+    }
   }
 }
 
@@ -36,7 +40,11 @@ locals {
   } }
 }
 
+resource "random_id" "psk" {
+  count = var.ipsec_psk == null ? 0 : 1
 
+  byte_length = 32
+}
 
 resource "fortios_vpnipsec_phase1interface" "phase1" {
   for_each = { for i in local.interfaces : i.interface_uid => i }
@@ -57,7 +65,7 @@ resource "fortios_vpnipsec_phase1interface" "phase1" {
   dpd                   = "on-idle"
   auto_discovery_sender = "enable"
   tunnel_search         = "nexthop" # removed in 7.0.x+
-  psksecret             = var.ipsec_psk
+  psksecret             = var.ipsec_psk == null ? random_id.psk.b64_url : 1
   dpd_retryinterval     = 5
   mode_cfg              = "enable"
   ipv4_start_ip         = cidrhost(each.value.tunnel_subnet, 2)
@@ -252,6 +260,7 @@ locals {
   }
 
 }
+
 output "hub" {
   description = "Hub information."
   value       = local.hub_info

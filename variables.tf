@@ -65,6 +65,7 @@ variable "ipsec_proposal" {
 variable "ipsec_psk" {
   type        = string
   description = "Pre-shared key for IPSEC tunnels."
+  default     = null
 }
 
 variable "ipsec_dhgrp" {
