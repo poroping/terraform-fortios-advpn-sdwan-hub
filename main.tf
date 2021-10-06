@@ -41,7 +41,7 @@ locals {
 }
 
 resource "random_id" "psk" {
-  count = var.ipsec_psk == null ? 0 : 1
+  count = var.ipsec_psk != null ? 0 : 1
 
   byte_length = 32
 }
@@ -65,7 +65,7 @@ resource "fortios_vpnipsec_phase1interface" "phase1" {
   dpd                   = "on-idle"
   auto_discovery_sender = "enable"
   tunnel_search         = "nexthop" # removed in 7.0.x+
-  psksecret             = var.ipsec_psk == null ? random_id.psk[0].b64_url : var.ipsec_psk
+  psksecret             = var.ipsec_psk != null ? random_id.psk[0].b64_url : var.ipsec_psk
   dpd_retryinterval     = 5
   mode_cfg              = "enable"
   ipv4_start_ip         = cidrhost(each.value.tunnel_subnet, 2)
@@ -268,5 +268,5 @@ output "hub" {
 
 output "psk" {
   description = "Outputs PSK if auto generated. Null if provided."
-  value       = var.ipsec_psk == null ? random_id.psk[0].b64_url : null
+  value       = var.ipsec_psk != null ? random_id.psk[0].b64_url : null
 }
