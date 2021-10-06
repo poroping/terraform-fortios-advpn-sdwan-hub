@@ -205,6 +205,8 @@ resource "fortios_system_sdwan_service" "hub" {
 }
 
 resource "fortios_firewall_policy" "sla_loop" {
+  vdomparam = var.vdom
+
   action   = "accept"
   name     = "ADVPN to SLA LOOPBACK"
   schedule = "always"
