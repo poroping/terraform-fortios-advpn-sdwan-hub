@@ -115,6 +115,10 @@ resource "fortios_routerbgp_neighbor_group" "group" {
   soft_reconfiguration        = "enable"
   next_hop_self               = "disable"
   next_hop_self_rr            = "disable"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "fortios_routerbgp_neighbor_range" "range" {
@@ -149,6 +153,10 @@ resource "fortios_system_interface" "sla_loop" {
   ip          = var.sla_loopback_ip
   allowaccess = "ping"
   vdom        = var.vdom
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # advertise sla loopback
