@@ -145,7 +145,7 @@ resource "fortios_routerbgp_network" "dial_up_vpn_subnets" {
 
 resource "fortios_system_interface" "sla_loop" {
   type        = "loopback"
-  name        = "${var.vpn_name_prefix}SDWAN-SLA"
+  name        = "${var.vpn_name_prefix}SLA"
   ip          = var.sla_loopback_ip
   allowaccess = "ping"
   vdom        = var.vdom
