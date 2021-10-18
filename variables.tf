@@ -10,10 +10,8 @@ variable "interfaces" {
   validation {
     condition = alltrue([
       for hub in var.interfaces : hub.interface_id >= 0 && hub.interface_id <= 99
-      ],
-      length(hub.interface_name) < 14
-    )
-    error_message = "Value of interface_id must be between 0 and 99 inclusive. String length of interface_name must be < 14 due to tunnel naming restrictions."
+    ],)
+    error_message = "Value of interface_id must be between 0 and 99 inclusive."
   }
   description = "Set of interface objects. interface_id is significant to hub. interface_name is name of parent interface to bind tunnel to. local_gw is local gateway for phase1-interface. nat_ip is ext IP if hub behind NAT. tunnel_subnet is subnet used for dial-in tunnels. "
 }
