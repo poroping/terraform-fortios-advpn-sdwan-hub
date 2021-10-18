@@ -10,7 +10,7 @@ variable "interfaces" {
   validation {
     condition = alltrue([
       for hub in var.interfaces : hub.interface_id >= 0 && hub.interface_id <= 99
-    ],)
+    ], )
     error_message = "Value of interface_id must be between 0 and 99 inclusive."
   }
   description = "Set of interface objects. interface_id is significant to hub. interface_name is name of parent interface to bind tunnel to. local_gw is local gateway for phase1-interface. nat_ip is ext IP if hub behind NAT. tunnel_subnet is subnet used for dial-in tunnels. "
@@ -72,4 +72,14 @@ variable "ipsec_dhgrp" {
   type        = string
   description = "List of dhgrp separated by whitespace."
   default     = "14"
+}
+
+variable "vpn_name_prefix" {
+  type        = string
+  description = "Used to prefix advpn interface name."
+  default     = "advpn"
+  validation {
+    condition     = length(var.vpn_name_prefix) < 9
+    error_message = "Length of string must be max 8 due to interface name length restrictions."
+  }
 }

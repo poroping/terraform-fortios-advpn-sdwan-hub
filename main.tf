@@ -27,16 +27,17 @@ terraform {
 
 locals {
   interfaces = { for i in var.interfaces : "${i.interface_name}-${i.interface_id}" => {
-    interface_name = i.interface_name
-    interface_id   = i.interface_id
-    interface_uid  = "${i.interface_name}-${i.interface_id}"
-    local_gw       = i.local_gw == null ? null : i.local_gw
-    nat_ip         = i.nat_ip == null ? null : i.nat_ip
-    advpn_name     = join("-", [tostring(var.hub_id), tostring(i.interface_id)])
-    advpn_longname = "hub:${tostring(var.hub_id)}-interface:${tostring(i.interface_id)}"
-    advpn_id       = join("", [tostring(var.hub_id), tostring(i.interface_id)])
-    hub_id         = var.hub_id
-    tunnel_subnet  = i.tunnel_subnet
+    interface_name  = i.interface_name
+    interface_id    = i.interface_id
+    interface_uid   = "${i.interface_name}-${i.interface_id}"
+    local_gw        = i.local_gw == null ? null : i.local_gw
+    nat_ip          = i.nat_ip == null ? null : i.nat_ip
+    advpn_name      = join("-", [tostring(var.hub_id), tostring(i.interface_id)])
+    advpn_longname  = "hub:${tostring(var.hub_id)}-interface:${tostring(i.interface_id)}"
+    advpn_id        = join("", [tostring(var.hub_id), tostring(i.interface_id)])
+    hub_id          = var.hub_id
+    tunnel_subnet   = i.tunnel_subnet
+    vpn_name_prefix = var.vpn_name_prefix
   } }
 }
 
@@ -51,7 +52,7 @@ resource "fortios_vpnipsec_phase1interface" "phase1" {
 
   vdomparam = var.vdom
 
-  name                  = "advpn-${each.value.advpn_name}"
+  name                  = "${each.value.vpn_name_prefix}${each.value.advpn_name}"
   local_gw              = each.value.local_gw
   type                  = "dynamic"
   interface             = each.value.interface_name
@@ -103,7 +104,7 @@ resource "fortios_routerbgp_neighbor_group" "group" {
 
   vdomparam = var.vdom
 
-  name                        = "advpn-${each.value.advpn_name}"
+  name                        = "${each.value.vpn_name_prefix}${each.value.advpn_name}"
   interface                   = fortios_vpnipsec_phase1interface.phase1[each.key].name
   remote_as                   = var.bgp_as
   route_reflector_client      = "enable"
@@ -144,7 +145,7 @@ resource "fortios_routerbgp_network" "dial_up_vpn_subnets" {
 
 resource "fortios_system_interface" "sla_loop" {
   type        = "loopback"
-  name        = "SDWAN-SLA"
+  name        = "${each.value.vpn_name_prefix}SDWAN-SLA"
   ip          = var.sla_loopback_ip
   allowaccess = "ping"
   vdom        = var.vdom
@@ -247,7 +248,7 @@ data "fortios_router_bgp" "bgp" {
 data "fortios_system_interface" "parent_interfaces" {
   for_each = { for i in local.interfaces : i.interface_uid => i }
 
-  name = each.value.interface_name  
+  name = each.value.interface_name
 }
 
 locals {
