@@ -255,7 +255,7 @@ locals {
   hub_links = [for i in local.interfaces : {
     advpn_id   = fortios_vpnipsec_phase1interface.phase1[i.interface_uid].network_id
     advpn_name = fortios_vpnipsec_phase1interface.phase1[i.interface_uid].name
-    remote_gw  = i.nat_ip != null ? i.nat_ip : i.local_gw != null ? i.local_gw : split("/", data.fortios_system_interface.parent_interfaces[i.interface_uid].ip)[0]
+    remote_gw  = i.nat_ip != null ? i.nat_ip : i.local_gw != null ? i.local_gw : split(" ", data.fortios_system_interface.parent_interfaces[i.interface_uid].ip)[0]
     tunnel_ip  = split("/", fortios_system_interface.vpn_interface[i.interface_uid].ip)[0]
   }]
   hub_info = {
