@@ -77,7 +77,7 @@ variable "ipsec_dhgrp" {
 variable "vpn_name_prefix" {
   type        = string
   description = "Used to prefix advpn interface name."
-  default     = "advpn"
+  default     = "advpn-"
   validation {
     condition     = length(var.vpn_name_prefix) < 9
     error_message = "Length of string must be max 8 due to interface name length restrictions."
