@@ -10,6 +10,7 @@ Does stuff.
 | Name | Version |
 |------|---------|
 | <a name="provider_fortios"></a> [fortios](#provider\_fortios) | >= 2.3.4 |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.1.0 |
 
 ## Inputs
 
@@ -22,14 +23,19 @@ Does stuff.
 | <a name="input_interregional_interface"></a> [interregional\_interface](#input\_interregional\_interface) | n/a | <pre>object({<br>    name     = string<br>    local_gw = string<br>    nat_ip   = string<br>    }<br>  )</pre> | `null` | no |
 | <a name="input_intrahub_hubs"></a> [intrahub\_hubs](#input\_intrahub\_hubs) | Set of intra-regional hub objects. | <pre>set(object({<br>    hub_id    = string<br>    remote_gw = string<br>    # bgp_as      = number<br>    remote_ip = string<br>    local_ip  = string<br>    }<br>  ))</pre> | `null` | no |
 | <a name="input_intrahub_interface"></a> [intrahub\_interface](#input\_intrahub\_interface) | n/a | <pre>object({<br>    name     = string<br>    local_gw = string<br>    nat_ip   = string<br>    }<br>  )</pre> | `null` | no |
+| <a name="input_ipsec_dhgrp"></a> [ipsec\_dhgrp](#input\_ipsec\_dhgrp) | List of dhgrp separated by whitespace. | `string` | `"14"` | no |
+| <a name="input_ipsec_proposal"></a> [ipsec\_proposal](#input\_ipsec\_proposal) | List of proposals separated by whitespace. | `string` | `"aes256-sha256"` | no |
+| <a name="input_ipsec_psk"></a> [ipsec\_psk](#input\_ipsec\_psk) | Pre-shared key for IPSEC tunnels. | `string` | `null` | no |
 | <a name="input_networks"></a> [networks](#input\_networks) | Networks to add to BGP networks. | `set(string)` | `[]` | no |
 | <a name="input_region_name"></a> [region\_name](#input\_region\_name) | Region name. | `string` | `"adpvn"` | no |
 | <a name="input_sla_loopback_ip"></a> [sla\_loopback\_ip](#input\_sla\_loopback\_ip) | Loopback address for SLA and VPN tunnel monitoring. | `string` | `"10.0.0.0/32"` | no |
 | <a name="input_vdom"></a> [vdom](#input\_vdom) | VDOM to apply configuration. | `string` | `"root"` | no |
+| <a name="input_vpn_name_prefix"></a> [vpn\_name\_prefix](#input\_vpn\_name\_prefix) | Used to prefix advpn interface name. | `string` | `"advpn"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_hub"></a> [hub](#output\_hub) | n/a |
+| <a name="output_hub"></a> [hub](#output\_hub) | Hub information. |
+| <a name="output_psk"></a> [psk](#output\_psk) | Outputs PSK if auto generated. Null if provided. |
 <!-- END_TF_DOCS -->
