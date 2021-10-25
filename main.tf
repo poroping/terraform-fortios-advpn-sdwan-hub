@@ -113,7 +113,7 @@ resource "fortios_routerbgp_neighbor_group" "group" {
   adv_additional_path         = 4
   capability_graceful_restart = "enable"
   soft_reconfiguration        = "enable"
-  next_hop_self               = "disable"
+  next_hop_self               = "enable"
   next_hop_self_rr            = "disable"
 
   lifecycle {
