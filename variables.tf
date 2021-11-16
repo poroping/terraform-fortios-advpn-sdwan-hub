@@ -13,7 +13,7 @@ variable "interfaces" {
     ], )
     error_message = "Value of interface_id must be between 0 and 99 inclusive."
   }
-  description = "Set of interface objects. interface_id is significant to hub. interface_name is name of parent interface to bind tunnel to. local_gw is local gateway for phase1-interface. nat_ip is ext IP if hub behind NAT. tunnel_subnet is subnet used for dial-in tunnels. "
+  description = "Set of interface objects.\ninterface_id is significant to hub.\ninterface_name is name of parent interface to bind tunnel to.\nlocal_gw is local gateway for phase1-interface.\nnat_ip is ext IP if hub behind NAT.\ntunnel_subnet is subnet used for dial-in tunnels. "
 }
 
 variable "networks" {
