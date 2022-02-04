@@ -342,12 +342,12 @@ resource "fortios_system_sdwan" "sdwan" {
 
   lifecycle {
     ignore_changes = [
-      "duplication",
-      "health_check",
-      "members",
-      "neighbor",
-      "service",
-      "zone"
+      duplication,
+      health_check,
+      members,
+      neighbor,
+      service,
+      zone
     ]
   }
 }
