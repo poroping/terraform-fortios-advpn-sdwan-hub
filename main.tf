@@ -339,6 +339,17 @@ resource "fortios_system_sdwan" "sdwan" {
   vdomparam = var.vdom
 
   status = "enable"
+
+  lifecycle {
+    ignore_changes = [
+      "duplication",
+      "health_check",
+      "members",
+      "neighbor",
+      "service",
+      "zone"
+    ]
+  }
 }
 
 resource "fortios_system_sdwan_zone" "zone" {
