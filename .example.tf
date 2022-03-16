@@ -1,14 +1,3 @@
-<!-- BEGIN_TF_DOCS -->
-# terraform-fortios-advpn-sdwan-hub
-
-Uses forked version of fortios provider
-
-Requires FortiOS >= 6.4.5
-
-Uses sub-table resources in BGP and SDWAN parent tables. Do not mix and match here.
-
-### Example Usage:
-```hcl
 terraform {
   required_version = ">= 1.0.1"
   backend "local" {}
@@ -185,34 +174,3 @@ resource "fortios_firewall_policy" "out1" {
     module.advpnhub1
   ]
 }
-```
-
-## Providers
-
-| Name | Version |
-|------|---------|
-| <a name="provider_fortios"></a> [fortios](#provider\_fortios) | >= 3.1.4 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.1.0 |
-
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_interfaces"></a> [interfaces](#input\_interfaces) | Set of interface objects.<br>interface\_id is significant to hub.<br>interface\_name is name of parent interface to bind tunnel to.<br>local\_gw is local gateway for phase1-interface.<br>nat\_ip is ext IP if hub behind NAT.<br>tunnel\_subnet is subnet used for dial-in tunnels. | <pre>set(object({<br>    interface_id   = number<br>    interface_name = string<br>    local_gw       = string<br>    nat_ip         = string<br>    tunnel_subnet  = string<br>    }<br>  ))</pre> | n/a | yes |
-| <a name="input_bgp_as"></a> [bgp\_as](#input\_bgp\_as) | BGP AS to use for ADVPN. | `number` | `65000` | no |
-| <a name="input_hub_id"></a> [hub\_id](#input\_hub\_id) | Hub ID - single digit int. | `number` | `1` | no |
-| <a name="input_ipsec_dhgrp"></a> [ipsec\_dhgrp](#input\_ipsec\_dhgrp) | List of dhgrp separated by whitespace. | `string` | `"14"` | no |
-| <a name="input_ipsec_proposal"></a> [ipsec\_proposal](#input\_ipsec\_proposal) | List of proposals separated by whitespace. | `string` | `"aes256-sha256"` | no |
-| <a name="input_ipsec_psk"></a> [ipsec\_psk](#input\_ipsec\_psk) | Pre-shared key for IPSEC tunnels. | `string` | `null` | no |
-| <a name="input_networks"></a> [networks](#input\_networks) | Networks to add to BGP networks. | `set(string)` | `[]` | no |
-| <a name="input_sla_loopback_ip"></a> [sla\_loopback\_ip](#input\_sla\_loopback\_ip) | Loopback address for SLA and VPN tunnel monitoring. | `string` | `"169.254.255.255/32"` | no |
-| <a name="input_vdom"></a> [vdom](#input\_vdom) | VDOM to apply configuration. | `string` | `"root"` | no |
-| <a name="input_vpn_name_prefix"></a> [vpn\_name\_prefix](#input\_vpn\_name\_prefix) | Used to prefix advpn interface name. | `string` | `"advpn-"` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| <a name="output_hub"></a> [hub](#output\_hub) | Hub information. |
-| <a name="output_psk"></a> [psk](#output\_psk) | Outputs PSK if auto generated. Null if provided. |
-<!-- END_TF_DOCS -->    

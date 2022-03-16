@@ -22,12 +22,6 @@ variable "networks" {
   default     = []
 }
 
-variable "region_name" {
-  type        = string
-  description = "Region name."
-  default     = "adpvn"
-}
-
 variable "bgp_as" {
   type        = number
   description = "BGP AS to use for ADVPN."
@@ -53,7 +47,7 @@ variable "hub_id" {
 variable "sla_loopback_ip" {
   type        = string
   description = "Loopback address for SLA and VPN tunnel monitoring."
-  default     = "10.0.0.0/32"
+  default     = "169.254.255.255/32"
 }
 
 variable "ipsec_proposal" {
