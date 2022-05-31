@@ -49,27 +49,29 @@ resource "fortios_vpnipsec_phase1interface" "phase1" {
 
   vdomparam = var.vdom
 
-  name                  = "${each.value.vpn_name_prefix}${each.value.advpn_name}"
-  local_gw              = each.value.local_gw
-  type                  = "dynamic"
-  interface             = each.value.interface_name
-  ike_version           = 2
-  peertype              = "any"
-  nattraversal          = each.value.nat_ip == null ? "forced" : "disable"
-  network_overlay       = "enable"
-  network_id            = tonumber(each.value.advpn_id)
-  net_device            = "disable"
-  proposal              = var.ipsec_proposal
-  add_route             = "disable"
-  dpd                   = "on-idle"
+  name            = "${each.value.vpn_name_prefix}${each.value.advpn_name}"
+  local_gw        = each.value.local_gw
+  type            = "dynamic"
+  interface       = each.value.interface_name
+  ike_version     = 2
+  peertype        = "any"
+  nattraversal    = each.value.nat_ip == null ? "disable" : "forced"
+  network_overlay = "enable"
+  network_id      = tonumber(each.value.advpn_id)
+  net_device      = "disable"
+  proposal        = var.ipsec_proposal
+  add_route       = "disable"
+  # dpd                   = "on-demand"
+  # dpd_retryinterval     = "2 500"
+  # dpd_retrycount        = 3
   auto_discovery_sender = "enable"
   tunnel_search         = "nexthop" # removed in 7.0.x+
   psksecret             = var.ipsec_psk == null ? random_id.psk[0].b64_url : var.ipsec_psk
-  dpd_retryinterval     = 5
-  mode_cfg              = "enable"
-  ipv4_start_ip         = cidrhost(each.value.tunnel_subnet, 2)
-  ipv4_end_ip           = cidrhost(each.value.tunnel_subnet, -2)
-  ipv4_netmask          = cidrnetmask(each.value.tunnel_subnet)
+  # dpd_retryinterval     = 5
+  mode_cfg      = "enable"
+  ipv4_start_ip = cidrhost(each.value.tunnel_subnet, 2)
+  ipv4_end_ip   = cidrhost(each.value.tunnel_subnet, -2)
+  ipv4_netmask  = cidrnetmask(each.value.tunnel_subnet)
 }
 
 resource "fortios_vpnipsec_phase2interface" "phase2" {
@@ -110,9 +112,13 @@ resource "fortios_routerbgp_neighbor_group" "group" {
   additional_path             = "both"
   adv_additional_path         = 4
   capability_graceful_restart = "enable"
+  capability_route_refresh    = "enable"
   soft_reconfiguration        = "enable"
   next_hop_self               = "enable"
   next_hop_self_rr            = "disable"
+  keep_alive_timer            = 7
+  holdtime_timer              = 21
+  advertisement_interval      = 5
 
   lifecycle {
     create_before_destroy = true
@@ -166,22 +172,22 @@ resource "fortios_routerbgp_network" "sla_loop" {
   prefix = fortios_system_interface.sla_loop.ip
 }
 
-resource "fortios_system_sdwan" "sdwan" {
-  vdomparam = var.vdom
+# resource "fortios_system_sdwan" "sdwan" {
+#   vdomparam = var.vdom
 
-  status = "enable"
+#   status = "enable"
 
-  lifecycle {
-    ignore_changes = [
-      duplication,
-      health_check,
-      members,
-      neighbor,
-      service,
-      zone
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       duplication,
+#       health_check,
+#       members,
+#       neighbor,
+#       service,
+#       zone
+#     ]
+#   }
+# }
 
 resource "fortios_system_sdwan_zone" "zone" {
   vdomparam = var.vdom
